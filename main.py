@@ -208,7 +208,7 @@ def main_worker(gpu, ngpus_per_node, args):
         if args.distributed:
             train_sampler.set_epoch(epoch)
 
-        lr, acc_history = adjust_learning_rate(optimizer, epoch, acc_history, args, plateau=True, patience=1)
+        adjust_learning_rate(optimizer, epoch, acc_history, args)
 
         # train for one epoch
         train(train_loader, model, criterion, optimizer, epoch, args)
@@ -365,25 +365,24 @@ class AverageMeter(object):
         self.avg = self.sum / self.count
 
 
-def adjust_learning_rate(optimizer, epoch, acc_history, args, plateau=False, patience=3):
+def adjust_learning_rate(optimizer, epoch, acc_history, args):
     """Sets the learning rate to the initial LR decayed by 10 every 30 epochs or when lr plateaus"""
     # Decrease learning rate each 30 epochs
-    if plateau == False:
-        lr = args.lr * (0.1 ** (epoch // 30))
-        for param_group in optimizer.param_groups:
-            param_group['lr'] = lr
-        print("Adjusting learning rate to {lr}".format(lr=lr))
-        return lr
+#     if plateau == False:
+    lr = args.lr * (0.1 ** (epoch // 30))
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = lr
+#     print("Adjusting learning rate to {lr}".format(lr=lr))
     # Decrease learning rate with plateau
-    if plateau == True and len(acc_history) > patience + 1:
-        if max(acc_history) > max(acc_history[-(patience+1):]):
-            args.lr = args.lr  * 0.1
-            for param_group in optimizer.param_groups:
-                param_group['lr'] = args.lr
-            # reset history
-            acc_history = []
-            print("Learning rate has plateaud, adjusting learning rate to {lr:.5f}".format(lr=args.lr))
-        return args.lr, acc_history
+#     if plateau == True and len(acc_history) > patience + 1:
+#         if max(acc_history) > max(acc_history[-(patience+1):]):
+#             args.lr = args.lr  * 0.1
+#             for param_group in optimizer.param_groups:
+#                 param_group['lr'] = args.lr
+#             # reset history
+#             acc_history = []
+#             print("Learning rate has plateaud, adjusting learning rate to {lr:.5f}".format(lr=args.lr))
+#         return args.lr, acc_history
 
     return args.lr, acc_history
 
