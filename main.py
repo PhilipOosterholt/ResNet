@@ -17,6 +17,7 @@ import torch.utils.data.distributed
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 import torchvision.models as models
+from resnet import *
 
 model_names = sorted(name for name in models.__dict__
     if name.islower() and not name.startswith("__")
@@ -26,10 +27,10 @@ best_acc1 = 0
 
 class args():
 
-    def __init__(self):
+    def __init__(self, tmpdir):
 
       self.gpu =  'cuda:0'
-      self.data = '/storage/Cars'
+      self.data = tmpdir + '/imagenet'
       self.dist_ackend = 'nccl'
       self.rank = -1
       self.world_size = -1
@@ -49,11 +50,9 @@ class args():
       self.evaluate = None
       self.dist_url = 'tcp://224.66.41.62:23456'
       self.seed = None
-      self.resume = "storage/Cars/Model"
+      self.resume = tmpdir + '/imagenet/model'
 
-args = args()
-
-def main():
+def main(args):
 
     if args.seed is not None:
         random.seed(args.seed)
@@ -403,4 +402,5 @@ def accuracy(output, target, topk=(1,)):
         return res
 
 if __name__ == '__main__':
-    main()
+    args = args(sys.argv[1])
+    main(args)
