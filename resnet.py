@@ -19,9 +19,9 @@ import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 import torchvision.models as models
 
-__all__ = ['ResNet', 'resnet6', 'resnet10', 'resnet18', 'resnet34', 'resnet50',
-            'resnet101', 'resnet152', 'resnext50_32x4d', 'resnext101_32x8d',
-           'wide_resnet50_2', 'wide_resnet101_2']
+# __all__ = ['ResNet', 'resnet6', 'resnet10', 'resnet18', 'resnet34', 'resnet50',
+#             'resnet101', 'resnet152', 'resnext50_32x4d', 'resnext101_32x8d',
+#            'wide_resnet50_2', 'wide_resnet101_2']
 
 model_urls = {
     'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
@@ -35,13 +35,10 @@ model_urls = {
     'wide_resnet101_2': 'https://download.pytorch.org/models/wide_resnet101_2-32ee1156.pth',
 }
 
-
-
 def conv3x3(in_planes, out_planes, stride=1, groups=1, dilation=1):
     """3x3 convolution with padding"""
     return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride,
                      padding=dilation, groups=groups, bias=False, dilation=dilation)
-
 
 def conv1x1(in_planes, out_planes, stride=1):
     """1x1 convolution"""
